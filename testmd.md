@@ -66,8 +66,10 @@ instances:
 <a title="custom metric Timeboard">
 <img src="https://github.com/SilverGeekPanda/Datadog_Screenshots/blob/Pictures/Collecting_Metrics/customMetric_Timeboard.png"></a>
 
-###Bonus question: Can you change the collection interval without modifying the Python check file you created?
+### Bonus question 
+* Can you change the collection interval without modifying the Python check file you created?
 
+Actually, the usual way to change the collection interval is to edit the config file associated to the python file as demonstrated before. But I think we can do it in a tricky way. In fact, we could directly edit the AgentCheck class and set the default collection interval to the expected value. But that's mean it will be changed for every custom Agent Check we will write. So we need to be sure it will be worth it.
 
 ## 2 - Vizualizing Data
 Here is the python script ``` createTimeboard.py ``` wrote to create a Timeboard answering thoses three intructions: 
@@ -307,6 +309,7 @@ But at this step, no traces has been sent so the APM dashboard has not been crea
 
 ### Bonus Question
 * What is the difference between a Service and a Resource?
+According to the documentation, a Rervice is a set of processes that do the same job while a Resource is particular for a service. 
 
 ## 5 - Final Question
 
