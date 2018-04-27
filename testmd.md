@@ -225,7 +225,88 @@ Here is the differents step to configure this monitor in function of the instruc
 
 
 ## 4 - Collecting APM Data
-Test
+* Given the following Flask app (or any Python/Ruby/Go app of your choice) instrument this using Datadog’s APM solution:
+```python
+from flask import Flask
+import logging
+import sys
+
+# Have flask use stdout as the logger
+main_logger = logging.getLogger()
+main_logger.setLevel(logging.DEBUG)
+c = logging.StreamHandler(sys.stdout)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+c.setFormatter(formatter)
+main_logger.addHandler(c)
+
+app = Flask(__name__)
+
+@app.route('/')
+def api_entry():
+    return 'Entrypoint to the Application'
+
+@app.route('/api/apm')
+def apm_endpoint():
+    return 'Getting APM Started'
+
+@app.route('/api/trace')
+def trace_endpoint():
+    return 'Posting Traces'
+
+if __name__ == '__main__':
+    app.run()
+```
+First, install the python client: <br />
+ ``` pip install ddtrace ``` <br />
+ 
+Then the python script has been change a bit. The ddagent is listening on the port:5000 and the default flask's configuraton is to run the server on the port 5000 as well, its has been changed to 5050.<br />
+``` flaskData.py ```
+
+```python
+   from flask import Flask
+   import blinker as _
+   import logging
+   import sys
+  
+   from ddtrace import tracer
+   from ddtrace.contrib.flask import TraceMiddleware
+  
+  # Have flask use stdout as the logger
+  main_logger = logging.getLogger()
+  main_logger.setLevel(logging.DEBUG)
+  c = logging.StreamHandler(sys.stdout)
+  formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+  c.setFormatter(formatter)
+  main_logger.addHandler(c)
+ 
+  app = Flask(__name__)
+  traced_app = TraceMiddleware(app, tracer, service="my-flask-app", distributed_tracing=False)
+ 
+  @app.route('/')
+  def api_entry():
+          return 'Entrypoint to the Application'
+ 
+  @app.route('/api/apm')
+  def apm_endpoint():
+          return 'Getting APM Started'
+ 
+  @app.route('/api/trace')
+  def trace_endpoint():
+          return 'Posting Traces'
+ 
+  if __name__ == '__main__':
+          app.run(port=5050)
+```
+Then strike the following command line to run the tracer: <br />
+``` (flask)vagrant@precise64:~/flask$ ddtrace-run python flaskData.py ```
+Here is the result of this command:
+<a title="APM">
+<img src="https://github.com/SilverGeekPanda/Datadog_Screenshots/blob/Pictures/APM/APM_Failed.png"></a>
+
+But at this step, no traces has been sent so the APM dashboard has not been created. I am still looking why it is stuck on this. It will be greate if we can exchange about that. I did not post an issue because this is my last day and my last hours. 
+
+### Bonus Question
+* What is the difference between a Service and a Resource?
 
 ## 5 - Final Question
 
