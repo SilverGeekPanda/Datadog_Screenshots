@@ -1,8 +1,7 @@
 ### Charlie Boutier - Solution engineer hiring test - April 26 2018
 
 ## 0 - Introduction
-
-Welcome on board, here is my answer for the Solutions Engineering test. I did this test on a Macbook pro mid 2012 - macOS High Sierra 10.13.4. I followed the advise, I ran the Datadog Agent on a fresh ubuntu 12.04 VM via Vagrant. The answer is divided in 6 parts : 
+Welcome on board, here is my answer to the Solutions Engineering test. I did this test on a Macbook pro mid-2012 - macOS High Sierra 10.13.4. I followed the advice, I ran the Datadog Agent on a fresh ubuntu 12.04 VM via Vagrant. The answer is divided into 6 parts :
 
 * Collectings Metrics
 * Vizualizing Data
@@ -34,7 +33,7 @@ The first screenshots is the config file and the second one is Host mage page wi
 ### Created a custom Agent check that submots a metric named my_metric with a random value between 0 and 1000. <br />
 To write an Agent check it is important to do three important things: 
 * First, write a python script in the folder ``` /etc/datadog-agent/checks.d ```
-* Second, a configuration associated to the script placed in the folder ``` /etc/datadog-agent/conf.d ```
+* Second, a configuration associated with the script placed in the folder ``` /etc/datadog-agent/conf.d ```
 * Third, the python script and the config file must have the same name.
 In that case, the python script is ``` sendMyMetric.py ``` and the config file ``` sendMyMetric.yaml ``` <br />
 
@@ -49,9 +48,9 @@ class sendMyMetric(AgentCheck):
 	self.gauge('AgentCheck.my_metric', randomMetric)
 ```
 
-The custom metric need to be sent once every 45 seconds. As mentionned in the documentation, we need to change the value of the collection interval by setting the value ``` min_collection_interval ``` in the config file on the ``` instances ``` section (Only for AgentV6). It is precise that the collector runs every 15-20 seconds. For example, if we set the value of ``` min_collection_interval ``` at 40, here is the behaviour of the collector:
-* First round, the collector value is 15 which is inferior at 40, the collector do not collect. 
-* Second round, the collector value is 30 which is inferior at 40, the collector do not collect. 
+The custom metric need to be sent once every 45 seconds. As mentioned in the documentation, we need to change the value of the collection interval by setting the value ``` min_collection_interval ``` in the config file on the ``` instances ``` section (Only for AgentV6). It is noted that the collector runs every 15-20 seconds. For example, if we set the value of ``` min_collection_interval ``` at 40, here is the behavior of the collector:
+* First round, the collector value is 15 which is inferior at 40, the collector does not collect. 
+* Second round, the collector value is 30 which is inferior at 40, the collector does not collect. 
 * Third round, the collector value is 45 which is _bigger_ than 40, the collector will collect at 45 seconds. 
 
 Look like 40 is a good value for our situation, here is the config file sendMyMetric.yaml:
@@ -69,13 +68,13 @@ instances:
 ### Bonus question 
 * Can you change the collection interval without modifying the Python check file you created?
 
-Actually, the usual way to change the collection interval is to edit the config file associated to the python file as demonstrated before. But I think we can do it in a tricky way. In fact, we could directly edit the AgentCheck class and set the default collection interval to the expected value. But that's mean it will be changed for every custom Agent Check we will write. So we need to be sure it will be worth it.
+Actually, the usual way to change the collection interval is to edit the config file associated with the python file as demonstrated before. But I think we can do it in a tricky way. In fact, we could directly edit the AgentCheck class and set the default collection interval to the expected value. But that's mean it will be changed for every custom Agent Check we will write. So we need to be sure it will be worth it.
 
 ## 2 - Vizualizing Data
-Here is the python script ``` createTimeboard.py ``` wrote to create a Timeboard answering thoses three intructions: 
+Here is the python script ``` createTimeboard.py ``` wrote to create a Timeboard answering those three instructions: 
 * Your custom metric scoped over your host.
-* Any metric from the Integration on your Database with the anomaly function applied.
-* Your custom metric with the rollup function applied to sum up all the points for the past hour into one bucket
+* Any metric from the Integration of your Database with the anomaly function applied.
+* Your custom metric with the roll-up function applied, to sum up all the points for the past hour into one bucket
 
 ```python
 
@@ -177,17 +176,17 @@ This is the snapshot of the past 5 min for the Anomaly graph. <br />
 
 ## Bonus Question: What is the Anomaly graph displaying
 
-The Anomaly graph is displaying three different things who are:
+The Anomaly graph is displaying three different things that are:
 * Gray band: represent the area where the metric should stay
 * Blue line: The metric is in the area represented by the gray band
 * Red line: The metric is out of limit
 
-Actualy, the gray band has a coherent behaviour only after 30 min. In fact, the input of the Anomaly's algorithm is too poor of data to give a correct answer before this period. It also depends if the metric is currently used or not.
+Actually, the gray band has a coherent behavior only after 30 min. In fact, the input of the Anomaly's algorithm is too poor of data to give a correct answer before this period. It also depends if the metric is currently used or not.
 
 ## 3 - Monitoring Data
-A monitor watch the value of one or several metrics and can notify the differents users associate in the parameter. In this case, the main is to create a monitor that watches the average of the custom metric (my_metric). 
+A monitor watches the value of one or several metrics and can notify the different users associate in the parameter. In this case, the main is to create a monitor that watches the average of the custom metric (my_metric). 
 
-Here is the differents step to configure this monitor in function of the instructions given by the exercices:
+Here is the step to configure this monitor:
 
 * Select the threshold Alert and choose the metric to watch.
 <a title="1_2">
@@ -305,17 +304,14 @@ Here is the result of this command:
 <a title="APM">
 <img src="https://github.com/SilverGeekPanda/Datadog_Screenshots/blob/Pictures/APM/APM_Failed.png"></a>
 
-But at this step, no traces has been sent so the APM dashboard has not been created. I am still looking why it is stuck on this. It will be greate if we can exchange about that. I did not post an issue because this is my last day and my last hours. 
+But at this step, no traces have been sent to the APM dashboard has not been created. I am still looking why it is stuck on this. It will be great if we can exchange about that. I did not post an issue because this is my last day and my last hours.  
 
 ### Bonus Question
 * What is the difference between a Service and a Resource? <br/>
-
-According to the documentation, a Service is a set of processes that do the same job while a Resource is particular for a service. 
+According to the documentation, a Service is a set of processes that do the same job. While a Resource is particular for a service. 
 
 ## 5 - Final Question
 ### Datadog has been used in a lot of creative ways in the past. We’ve written some blog posts about using Datadog to monitor the NYC Subway System, Pokemon Go, and even office restroom availability!
 
 ### Is there anything creative you would use Datadog for?
-The first thing who come in my mind was to combine my electronic background with my sea lover side. It could be really fun to build a device with an embedded camera and wireless communication, as LoRa or Sigfox for really longue distance coverage. Then I will place this device in front of the sea, and with a little bit of image processing collect the data of the swell, wing, temperature and any weather informations. Then thanks to Datadog, it could be easier to find the best time to pull out the surfboard from the garage and take a amazing ride !
-
-## 6 - Conclusion
+The first thing that occurred to me  was to combine my electronic background with my sea lover’s side. It could be really fun to build a device with an embedded camera and wireless communication, as Lora or Sigfox for really long distance coverage. Then I will place this device in front of the sea, and with a bit of Image processing collect the data of the swell, wind, temperature and any weather information. Then thanks to Datadog, it could be easier to find the best time to pull out the surfboard from the garage and take an amazing ride!
