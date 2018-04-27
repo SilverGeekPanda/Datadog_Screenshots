@@ -308,9 +308,14 @@ Here is the result of this command:
 But at this step, no traces has been sent so the APM dashboard has not been created. I am still looking why it is stuck on this. It will be greate if we can exchange about that. I did not post an issue because this is my last day and my last hours. 
 
 ### Bonus Question
-* What is the difference between a Service and a Resource?
-According to the documentation, a Rervice is a set of processes that do the same job while a Resource is particular for a service. 
+* What is the difference between a Service and a Resource? <br/>
+
+According to the documentation, a Service is a set of processes that do the same job while a Resource is particular for a service. 
 
 ## 5 - Final Question
+### Datadog has been used in a lot of creative ways in the past. We’ve written some blog posts about using Datadog to monitor the NYC Subway System, Pokemon Go, and even office restroom availability!
+
+### Is there anything creative you would use Datadog for?
+The first thing who come in my mind was to combine my electronic background with my sea lover side. It could be really fun to build a device with an embedded camera and wireless communication, as LoRa or Sigfox for really longue distance coverage. Then I will place this device in front of the sea, and with a little bit of image processing collect the data of the swell, wing, temperature and any weather informations. Then thanks to Datadog, it could be easier to find the best time to pull out the surfboard from the garage and take a amazing ride !
 
 ## 6 - Conclusion
